@@ -1,0 +1,22 @@
+﻿@model IEnumerable<ShoesLover.Models.Product>
+@{ IEnumerable<CategoryMasterModel> categoryMasterData = ViewData["product"] as IEnumerable<CategoryMasterModel>;}
+@using ShoesLover.Data;
+
+@{ ViewData["Tilte"] = "Danh sách giay"; }
+
+@{
+                <table class="table">
+                    <tr>
+                        <th> Mã sản phẩm</th>
+                        <th> Tên sản phẩm</th>
+                        <th> Hinh ảnh sản phẩm</th>
+                    </tr>
+                    @foreach (var pd in Model)
+                    {
+        <tr>
+            <td>@pd.Id</td>
+            <td>@pd.ProductName</td>
+            <td>@pd.DefaultImage</td>
+        </tr>}
+                </table> }
+

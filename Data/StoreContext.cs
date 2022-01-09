@@ -5114,6 +5114,125 @@ namespace ShoesLover.Data
             }
             return resultList;
         }
+        //Analysis
+        public List<object> SoLuongGiay()
+        {
+            List<object> list = new List<object>();
+
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+
+                string str = "select p.productname,pt.quantity as SL from product_detail pt,PRODUCT p where p.id = pt.product_id group by p.id";
+
+                MySqlCommand cmd = new MySqlCommand(str, conn);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var ob = new { tengiay = reader["productname"].ToString(), soluong = Convert.ToInt32(reader["SL"]) };
+                        list.Add(ob);
+
+                    }
+                    reader.Close();
+                }
+
+                conn.Close();
+
+            }
+            return list;
+
+        }
+
+        public List<Product> GetProducts1(int msc)
+        {
+            List<Product> list = new List<Product>();
+
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                string str = "select * from PRODUCT where subcategory_id=@msc";
+                MySqlCommand cmd = new MySqlCommand(str, conn);
+                cmd.Parameters.AddWithValue("msc", msc);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        list.Add(new Product()
+                        {
+                            Id = Convert.ToInt32(reader["id"]),
+                            ProductName = reader["productName"].ToString(),
+                        });
+                    }
+                    reader.Close();
+                }
+
+                conn.Close();
+
+            }
+            return list;
+        }
+        public List<object> DoanhThu()
+        {
+            List<object> list = new List<object>();
+
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+
+                string str = "SELECT sum(total) as tong, date_format(order_date, '%Y - %m') as MonthYear FROM `order` group by MonthYear";
+
+                MySqlCommand cmd = new MySqlCommand(str, conn);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var ob = new { year = reader["MonthYear"].ToString(), tong = Convert.ToInt32(reader["tong"]) };
+                        list.Add(ob);
+
+                    }
+                    reader.Close();
+                }
+
+                conn.Close();
+
+            }
+            return list;
+
+        }
+        public List<object> Top5BestSeller()
+        {
+            List<object> list = new List<object>();
+
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+
+                string str = "select p.productname as name1, sum(o.quantity) as SL1 " +
+                    "from product p,order_detail o, product_detail pd " +
+                    "where p.id=pd.product_id and o.product_detail_id=pd.id " +
+                    "group by productname " +
+                    "order by o.quantity DESC " +
+                    "limit 5";
+
+                MySqlCommand cmd = new MySqlCommand(str, conn);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var ob = new { name = reader["name1"].ToString(), all = Convert.ToInt32(reader["SL1"]) };
+                        list.Add(ob);
+
+                    }
+                    reader.Close();
+                }
+
+                conn.Close();
+
+            }
+            return list;
+
+        }
     }
 }
 

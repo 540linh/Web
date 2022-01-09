@@ -1,0 +1,20 @@
+﻿@model IEnumerable<ShoesLover.Models.SubCategory>
+@{ IEnumerable<CategoryMasterModel> categoryMasterData = ViewData["category"] as IEnumerable<CategoryMasterModel>;}
+@using ShoesLover.Data;
+
+@{
+    ViewData["Tilte"] = "Liệt kê subcategory";
+}
+
+<h2>Danh sách subcategory</h2>
+<form action="/Admin/Analysis/LietKeSoGiay" method="post">
+    <label for="subcategory_name">Danh sách subcategory</label>
+    <select name="id" id="subcategory_name">
+        @foreach (var item in Model)
+        {
+
+            <option value="@item.Id">@item.SubCategoryName</option>
+        }
+    </select><br>
+    <input type="submit" name="submit" value="Liệt kê" class="btn btn-primary" />
+</form>

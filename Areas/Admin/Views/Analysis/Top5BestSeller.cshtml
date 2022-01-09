@@ -1,0 +1,24 @@
+﻿@model List<object>
+@{
+    ViewData["Title"] = "Top 5 best seller";
+}
+
+<h2>Top 5</h2>
+<table border="1">
+    <tr>
+        <th>Tên giày</th>
+        <th>Số lượng đã bán</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @item.GetType().GetProperty("name").GetValue(item, null)
+            </td>
+            <td>
+                @item.GetType().GetProperty("all").GetValue(item, null)
+            </td>
+        </tr>
+    }
+</table>
